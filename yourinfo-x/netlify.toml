@@ -1,0 +1,24 @@
+# Netlify configuration for YourInfo X
+# Static React build is served from dist/, serverless functions live in netlify/functions.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  # esbuild bundles the TypeScript functions automatically
+  node_bundler = "esbuild"
+
+# Map clean /api/* paths to the serverless functions. Must come before the
+# SPA fallback below, since the first matching rule wins.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA fallback so client side routing always resolves to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
